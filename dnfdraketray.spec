@@ -48,31 +48,3 @@ install -Dm 755 FILE-EXTRA/dnfdraketray.gambas.desktop -t %{buildroot}/%{_datadi
 %{_bindir}/dnfdraketray.gambas
 %{_datadir}/dnfdrake/license
 %{_datadir}/dnfdrake/dnfdraketray.gambas.desktop
-
-%changelog
-*Tue May 02 2023 Astragalo <mauro.carbini@gmail.com> 2.0.8-mib1
-- Separazione del pacchetto da DnfDrake
-
-*Thu Dec 15 2022 Astragalo <mauro.carbini@gmail.com> 2.0.7-mib1
-- Riassunto di tutti i changelog
-- Aggiornamento di DnfDrakeTray versione 2.0.7 dovrebbe sistemare la posizione della finestra
-- Modifica identificazione lingua in DnfDrake e DnfDrakeTray
-- Spostata la finestra di DnfDrakeTray 2.0.3
-- In DnfDrakeTray 2.0.2 corretta la gestione delle istanze multiple basata su intero anziche su stringa
-- In DnfDrakeTray 2.0.1 corretta la gestione delle istanze multiple ora funziona
-- In DnfDrakeTray 2.0.0 riscritta l'identificazione della lingua e la gestione delle istanze multiple
-- Dnfdraketray imposta un carattere a 0 se non ci sono aggiornamenti a 1 se disponibili
-- Fix  avvio automatico di   dnfdraketray quando non esiste la cartella autostart in .config
-- Aggiunto pulsante reset su extra dnfdraketray
-- Fix  su  dnfdraketray
-- SHIFT+MOUSECLICK chiude dnfdraketray
-- Fix vari su  dnfdraketray
-- Cambiata l'icona di chiusura  dnfdraketray
-- Semplificazione funzioni  dnfdraketray
-- Fix vari su  dnfdraketray
-- Fix opzione che  all'avvio  dnfdraketray
-- Inserita opzione lancia all'avvio  dnfdraketray
-- Rimosso il menu contestuale da dnfdraketray
-- Migliorata la gestione di  dnfdraketray in dnfdrake >extra
-- Evita l'apertura di più istanze di dnfdraketray
-- Inizio funzionanalità trayicon
