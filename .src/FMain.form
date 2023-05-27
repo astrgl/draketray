@@ -1,0 +1,43 @@
+# Gambas Form File 3.0
+
+{ Form Form
+  MoveScaled(178.5714,100,36,14)
+  ToolTip = ("Click Tray for Hide")
+  Icon = Picture["dnfdrake.svg"]
+  Resizable = False
+  Border = False
+  { TXTMESSAGE Label
+    MoveScaled(1,1,34,7)
+    Font = Font["+3"]
+    Alignment = Align.Center
+    Border = Border.Plain
+    Text = ("System Updates!")
+  }
+  { TXTLANG Label
+    MoveScaled(16,9,4,4)
+    Visible = False
+    Alignment = Align.Center
+    Border = Border.Plain
+  }
+  { !TrayIcon1 #TrayIcon
+    #Public = True
+    Picture = Picture.Load("dnfdrake.svg")
+  }
+  { TMRSTART #Timer
+    #MoveScaled(27,0)
+    Delay = 1
+  }
+  { TMRUPDATE #Timer
+    #MoveScaled(7,0)
+  }
+  { BTNDNFDRAKE Button
+    MoveScaled(5,9,5,4)
+    ToolTip = ("Launch DnfDrake")
+    Picture = Picture["ICONS-EXTRA/dnfdrake16X16.png"]
+  }
+  { BTNCLOSE Button
+    MoveScaled(26,9,5,4)
+    ToolTip = ("Remember later")
+    Picture = Picture["icon:/16/quit"]
+  }
+}

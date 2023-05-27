@@ -1,0 +1,202 @@
+' Gambas class file
+
+'PROCESSO DI SISTEMA*******************************
+Public $hProcess As Process
+Public $sText As String
+Public $WORDUPDATE As String
+Public $TMRUPDATEVENT As Integer
+Public $LANG As String
+'Public $LOCK As Integer
+bAperto As Boolean
+
+'RISOLUZIONE**************************************
+Public $RISOLUZIONE As String
+Public $RISOLUZIONEX As Integer
+Public $RISOLUZIONEY As Integer
+'APERTURA PROGRAMMA E COMANDI ESEGUITI*******************************************************
+
+Public Sub Form_Open() 
+  
+  RESOLUTION
+ 'parole chiave
+ Dim flKEY As File  
+ Dim jKEY As Byte
+ Dim s$KEY As String
+ Dim ss$KEY As New String[]
+ 
+ 'MODULO PER EVITARE L'AVVIO DI PIÙ ISTANZE DEL PROGRAMMA************************************
+ Dim $LOCK As String
+ Dim $LOCKVAL As Integer
+  
+  Shell "ps aux | grep gbr3 | grep -w dnfdraketray.gambas | wc -l" Wait To $LOCK 
+  $LOCKVAL = CInteger(Val(Right(Left($LOCK))))
+  If $LOCKVAL > 2 Then
+    Quit 
+  Endif 
+  
+ 'lettura della lingua di sistema************************************************************
+ 
+ txtlang.Text = Left(Right(System.Language, -3), 2)
+ $LANG = Left(System.Language, 5)
+
+'PAROLE CHIAVE*******************************************************************
+  If Not Exist("/usr/share/dnfdrake/dnfdrake-KEY-" & $LANG) Then
+      Message.Info("Your language is unavailable, DnfDrakeTray and have been disable!", "Ok")
+      Shell ("rm -f " & User.Home &/ ".config/autostart/dnfdraketray.gambas.desktop")
+      Quit  
+  Else  
+      flKEY = Open "/usr/share/dnfdrake/dnfdrake-KEY-" & $LANG For Read   ' ...oppure "Input"
+        While Not Eof(flKEY)
+          Input #flKEY, s$KEY
+          ss$KEY.Add(s$KEY)
+        Wend
+      Close #flKEY
+      For jKEY = 0 To ss$KEY.Max
+          $WORDUPDATE = Replace(ss$KEY[3], "_", " ") 'KEY PER VERIFICA DISPONIBILITÀ AGGIORNAMENTI
+      Next
+      flKEY.Close
+   TrayIcon1.Show
+   TrayIcon1_Click
+   TMRSTART.Enabled = True
+   TMRUPDATE.Enabled = True
+   bAperto = True
+   $hProcess = Exec ["bash", "--noediting"] For Input Output As "Process"
+        
+  Endif 
+  
+  
+End
+
+'CHIUSURA PROGRAMMA*******************************************************
+
+Public Sub Form_close() 
+$hProcess.Kill
+Shell ("rm -f " & User.Home &/ ".config/dnfdrake/locktray")
+TrayIcon1.Delete
+End
+
+'PROCESSO DI SISTEMA*******************************************************
+
+Public Sub Process_Read()
+  Dim sStr As String
+ 
+  Read #$hProcess, sStr, -2560 '-2560 sembra risolvere i problemi in listpkg e i blocchi durante i comandi
+  $sText = $sText & sStr
+ If InStr($sText, $WORDUPDATE) > 0 Then                           'VERIFICA AGGIORNAMENTI
+    File.Save(User.Home &/ "/.config/dnfdrake/locktray", "1")
+    TrayIcon1.Show
+    TXTMESSAGE.Text = "Updates Available!"
+    FMain.Show
+    bAperto = True
+    TMRSTART.Delay = 5000
+    TMRSTART.Enabled = True
+    $sText = ""
+  Endif
+ 
+End
+
+'GESTIONE PULSANTI MOUSE SULLA TRAY******************************************
+Public Sub TrayIcon1_Click()
+
+  If bAperto = True Then 
+     Me.Hide
+     bAperto = False
+   Else
+     Me.Show
+     bAperto = True
+   Endif
+ 
+End
+
+
+Private Sub DNFDRAKE()
+Shell ("/usr/bin/dnfdrake.gambas")
+End
+
+
+Private Sub UPGRADES()
+
+Print #$hProcess, "dnf list upgrades" & gb.NewLine;  
+End
+
+
+'TIMER DI SISTEMA*************************************************************
+Private Sub RESOLUTION()
+  'POSIZIONAMENTO FINESTRA A TUTTE LE RISOLUZIONI
+  Shell "xrandr --current |grep '*'" To $RISOLUZIONE
+  $RISOLUZIONEX = Val(Str(Right(Left($risoluzione, 7), 4)))
+  $RISOLUZIONEY = Val(Str(Right(Left($risoluzione, 12), 4)))
+  FMain.X = FMain.X + ($RISOLUZIONEX - 1366)
+  FMain.Y = FMain.Y + ($RISOLUZIONEY - 768)
+End
+
+Public Sub TMRSTART_Timer()
+
+  If Not Exist(User.Home &/ ".config/dnfdrake/locktray") Then
+  File.Save(User.Home &/ "/.config/dnfdrake/locktray", "0")
+  Endif
+  If bAperto = True Then
+  TrayIcon1_Click  
+  Endif
+  
+  TMRSTART.Enabled = False
+
+End
+
+
+'TIMER VERIFICA AGGIORNAMENTI****************************
+
+Public Sub TMRUPDATE_Timer() 
+
+ If $TMRUPDATEVENT = 0 Then
+  $TMRUPDATEVENT = 1
+  TrayIcon1.hide
+  TMRUPDATE.Delay = 180000
+  Else
+    UPGRADES
+    ' MyMenu_2_Click
+    TMRUPDATE.Delay = 7200000
+   Endif
+
+End
+
+'ALTRI COMANDI*******************************************
+
+Public Sub TXTMESSAGE_MouseDown()
+
+End
+
+
+
+Public Sub BTNDNFDRAKE_Click()
+
+  DNFDRAKE
+   Me.Hide
+  TXTMESSAGE.Text = "System Updates!"
+  TrayIcon1.hide
+
+End
+
+Public Sub BTNCLOSE_Click()
+
+  TXTMESSAGE.Text = "System Updates!"
+  TrayIcon1.hide
+  TrayIcon1_Click
+  
+
+End
+
+
+Public Sub Spinner1_MouseDown()
+
+  
+
+End
+Public Sub BTNCLOSE_MouseDown()
+
+  If Mouse.Shift Then 
+    Me.Close
+  Endif   
+    
+End
+
