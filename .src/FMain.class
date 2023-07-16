@@ -115,8 +115,12 @@ End
 
 
 Private Sub UPGRADES()
-
-Print #$hProcess, "dnf list upgrades" & gb.NewLine;  
+'PRECARICAMENTO LISTE PER DNFDRAKE
+ Shell "dnf list installed >" & User.Home &/ ".config/dnfdrake/installati.txt" Wait
+ Shell "dnf list available >" & User.Home &/ ".config/dnfdrake/noninstallati.txt" Wait
+ Shell "dnf list upgrades >" & User.Home &/ ".config/dnfdrake/updates.txt" Wait
+'VERIFICA SE DISPONIBILI AGGIORNAMENTI 
+ Print #$hProcess, "dnf list upgrades" & gb.NewLine;  
 End
 
 
@@ -151,7 +155,8 @@ Public Sub TMRUPDATE_Timer()
  If $TMRUPDATEVENT = 0 Then
   $TMRUPDATEVENT = 1
   TrayIcon1.hide
-  TMRUPDATE.Delay = 180000
+  TMRUPDATE.Delay = 180000 
+  'TMRUPDATE.Delay = 1000 'RIDOTTO PER TEST
   Else
     UPGRADES
     ' MyMenu_2_Click

@@ -2,7 +2,7 @@
 Title=DnfDrakeTray
 Startup=FMain
 Icon=dnfdrake.svg
-Version=2.0.8
+Version=2.0.9
 Component=gb.image
 Component=gb.gui
 Component=gb.form
