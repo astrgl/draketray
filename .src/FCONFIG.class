@@ -1,0 +1,71 @@
+' Gambas class file
+
+Public Sub Form_Open()
+ FMain.$CONFIG = Val(File.Load(User.Home &/ "/.config/draketray/config"))
+  If FMain.$CONFIG = 0 Then
+     CHKDNFDRAKE.Value = False
+     CHKFLATDRAKE.Value = False
+  Endif    
+  If FMain.$CONFIG = 1
+     CHKDNFDRAKE.Value = True
+     CHKFLATDRAKE.Value = False
+  Endif 
+  If FMain.$CONFIG = 2
+     CHKDNFDRAKE.Value = False
+     CHKFLATDRAKE.Value = True
+  Endif 
+  If FMain.$CONFIG = 3
+     CHKDNFDRAKE.Value = True
+     CHKFLATDRAKE.Value = True      
+  Endif
+  
+  If Exist("/usr/bin/dnfdrake.gambas") Then
+    CHKDNFDRAKE.Enabled = True
+  Else 
+    CHKDNFDRAKE.Enabled = False  
+  Endif
+  If Exist("/usr/bin/flatdrake.gambas") Then
+    CHKFLATDRAKE.Enabled = True
+  Else 
+    CHKFLATDRAKE.Enabled = False  
+  Endif
+  If Exist(User.Home &/ ".config/autostart/draketray.desktop") Then
+    CHKAUTOSTART.Value = True
+  Else 
+    CHKAUTOSTART.Value = False
+  Endif
+
+End
+Public Sub Form_Close()
+  
+  If CHKDNFDRAKE.Value = False And If CHKFLATDRAKE.Value = False Then
+     File.Save(User.Home &/ "/.config/draketray/config", "0")
+  Endif
+  If CHKDNFDRAKE.Value = True And If CHKFLATDRAKE.Value = False Then
+     File.Save(User.Home &/ "/.config/draketray/config", "1")
+  Endif
+  If CHKDNFDRAKE.Value = False And If CHKFLATDRAKE.Value = True Then
+     File.Save(User.Home &/ "/.config/draketray/config", "2")
+  Endif
+  If CHKDNFDRAKE.Value = True And If CHKFLATDRAKE.Value = True Then
+     File.Save(User.Home &/ "/.config/draketray/config", "3")
+  Endif
+  
+  If CHKAUTOSTART.VALUE = True And If Not Exist(User.Home &/ ".config/autostart/draketray.desktop") Then
+      If Not Exist(User.Home &/ ".config/autostart") Then
+         Shell ("mkdir " & User.Home &/ ".config/autostart")
+      Endif
+      Shell ("cp /usr/share/draketray/draketray.desktop  " & User.Home &/ ".config/autostart/")    
+  Endif
+  If CHKAUTOSTART.VALUE = False And If Exist(User.Home &/ ".config/autostart/draketray.desktop") Then
+      Shell ("rm -f " & User.Home &/ ".config/autostart/draketray.desktop")
+  Endif
+  
+End
+
+
+Public Sub BTNCLOSE_Click()
+  BTNCLOSE.Enabled = False
+  Me.Close
+
+End

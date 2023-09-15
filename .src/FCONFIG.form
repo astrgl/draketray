@@ -1,0 +1,41 @@
+# Gambas Form File 3.0
+
+{ Form Form
+  MoveScaled(0,0,34,25)
+  Icon = Picture["draketray.svg"]
+  { BORDERCHKAUTOSTART Label
+    MoveScaled(1,14,31.4286,4)
+    Border = Border.Plain
+    BorderRadius = 15
+  }
+  { BORDERCHKFLATDRAKE Label
+    MoveScaled(1,8,31.4286,4)
+    Border = Border.Plain
+    BorderRadius = 15
+  }
+  { BORDERCHKDNFDRAKE Label
+    MoveScaled(1,2,31.4286,4)
+    Border = Border.Plain
+    BorderRadius = 15
+  }
+  { BTNCLOSE Button
+    MoveScaled(14.4286,19.4286,5,4)
+    ToolTip = ("Apply")
+    Picture = Picture["icon:/16/ok"]
+  }
+  { !CHKDNFDRAKE CheckBox
+    MoveScaled(2,2,30,4)
+    #Public = True
+    Text = ("Check updates for DnfDrake")
+  }
+  { !CHKFLATDRAKE CheckBox
+    MoveScaled(2,8,30,4)
+    #Public = True
+    Text = ("Check updates for FlatDrake")
+  }
+  { !CHKAUTOSTART CheckBox
+    MoveScaled(2,14,30,4)
+    #Public = True
+    Text = ("Run DrakeTray on startup")
+  }
+}

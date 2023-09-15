@@ -1,14 +1,14 @@
 # Gambas Project File 3.0
 Title=DnfDrakeTray
 Startup=FMain
-Icon=dnfdrake.svg
-Version=2.0.9
+Icon=draketray.svg
+Version=3.0.0
 Component=gb.image
 Component=gb.gui
 Component=gb.form
 Component=gb.dbus
 Component=gb.gui.trayicon
-Description="Trayicon per DnfDrake!"
+Description="DrakeTray is a tray updates notifier for DnfDrake and Flatdrake"
 Authors="Mauro Carbini (aka Astragalo) mauro.carbini@gmail.com"
 TabSize=2
 Language=en_US

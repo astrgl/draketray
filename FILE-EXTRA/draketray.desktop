@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=DrakeTray
+GenericName=Install & Remove Software
+Icon=draketray.svg
+Exec=draketray.gambas
+Comment=DrakeTray is a tray updates notifier for DnfDrake and Flatdrake
+Terminal=false
+Type=Application
+Categories=System;Utility;PackageManager;
+StartupNotify=true
+MimeType=application/x-rpm;application/x-redhat-package-manager;

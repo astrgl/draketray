@@ -1,43 +1,87 @@
 # Gambas Form File 3.0
 
 { Form Form
-  MoveScaled(178.5714,100,36,14)
+  MoveScaled(178.5714,100,40,17)
   ToolTip = ("Click Tray for Hide")
-  Icon = Picture["dnfdrake.svg"]
+  Icon = Picture["draketray.svg"]
   Resizable = False
   Border = False
-  { TXTMESSAGE Label
-    MoveScaled(1,1,34,7)
-    Font = Font["+3"]
-    Alignment = Align.Center
+  { Label3 Label
+    MoveScaled(0,0,40,17)
     Border = Border.Plain
-    Text = ("System Updates!")
   }
   { TXTLANG Label
-    MoveScaled(16,9,4,4)
+    MoveScaled(23,2,4,4)
     Visible = False
     Alignment = Align.Center
     Border = Border.Plain
   }
-  { !TrayIcon1 #TrayIcon
-    #Public = True
-    Picture = Picture.Load("dnfdrake.svg")
-  }
   { TMRSTART #Timer
-    #MoveScaled(27,0)
+    #MoveScaled(16,2)
     Delay = 1
   }
   { TMRUPDATE #Timer
-    #MoveScaled(7,0)
+    #MoveScaled(9,2)
+  }
+  { !TrayIcon1 #TrayIcon
+    #MoveScaled(2,2)
+    #Public = True
+    Picture = Picture.Load("dnfdrake.svg")
+  }
+  { TXTMESSAGE Label
+    MoveScaled(2,3,36,6)
+    Font = Font["+3"]
+    Alignment = Align.Center
+    Border = Border.Plain
+    BorderRadius = 20
+    Text = ("System Updated!")
+  }
+  { Label2 Label
+    MoveScaled(36.2857,0,3.5714,3.5714)
+    BorderRadius = 15
+  }
+  { BTNQUIT Button
+    MoveScaled(36.7143,0.4286,3,3)
+    ToolTip = ("Quit DrakeTray")
+    Picture = Picture["icon:/16/close"]
+    Border = False
   }
   { BTNDNFDRAKE Button
-    MoveScaled(5,9,5,4)
+    MoveScaled(3,11,5,4)
+    Enabled = False
     ToolTip = ("Launch DnfDrake")
     Picture = Picture["ICONS-EXTRA/dnfdrake16X16.png"]
   }
   { BTNCLOSE Button
-    MoveScaled(26,9,5,4)
+    MoveScaled(31,11,5,4)
     ToolTip = ("Remember later")
     Picture = Picture["icon:/16/quit"]
+  }
+  { BTNFLATDRAKE Button
+    MoveScaled(3,11,5,4)
+    Visible = False
+    Enabled = False
+    ToolTip = ("Launch DnfDrake")
+    Picture = Picture["ICONS-EXTRA/flatdrake16X16.png"]
+  }
+  { BTNCONFIG Button
+    MoveScaled(12,11,5,4)
+    ToolTip = ("Configure DrakeTray")
+    Picture = Picture["icon:/16/options"]
+  }
+  { Label1 Label
+    MoveScaled(0,0.1429,3.5714,3.5714)
+    BorderRadius = 15
+  }
+  { BTNINFO Button
+    MoveScaled(1,1,1.7143,1.7143)
+    ToolTip = ("About")
+    Picture = Picture["icon:/16/info"]
+    Border = False
+  }
+  { BTNCHECK Button
+    MoveScaled(22,11,5,4)
+    ToolTip = ("Check Updates")
+    Picture = Picture["icon:/16/refresh"]
   }
 }
