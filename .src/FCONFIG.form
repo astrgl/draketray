@@ -21,7 +21,6 @@
   { BTNCLOSE Button
     MoveScaled(14.4286,19.4286,5,4)
     ToolTip = ("Apply")
-    Picture = Picture["icon:/16/ok"]
   }
   { !CHKDNFDRAKE CheckBox
     MoveScaled(2,2,30,4)

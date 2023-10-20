@@ -43,7 +43,6 @@
   { BTNQUIT Button
     MoveScaled(36.7143,0.4286,3,3)
     ToolTip = ("Quit DrakeTray")
-    Picture = Picture["icon:/16/close"]
     Border = False
   }
   { BTNDNFDRAKE Button
@@ -55,7 +54,6 @@
   { BTNCLOSE Button
     MoveScaled(31,11,5,4)
     ToolTip = ("Remember later")
-    Picture = Picture["icon:/16/quit"]
   }
   { BTNFLATDRAKE Button
     MoveScaled(3,11,5,4)
@@ -67,7 +65,6 @@
   { BTNCONFIG Button
     MoveScaled(12,11,5,4)
     ToolTip = ("Configure DrakeTray")
-    Picture = Picture["icon:/16/options"]
   }
   { Label1 Label
     MoveScaled(0,0.1429,3.5714,3.5714)
@@ -76,12 +73,10 @@
   { BTNINFO Button
     MoveScaled(1,1,1.7143,1.7143)
     ToolTip = ("About")
-    Picture = Picture["icon:/16/info"]
     Border = False
   }
   { BTNCHECK Button
     MoveScaled(22,11,5,4)
     ToolTip = ("Check Updates")
-    Picture = Picture["icon:/16/refresh"]
   }
 }

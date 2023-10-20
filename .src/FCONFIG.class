@@ -34,6 +34,8 @@ Public Sub Form_Open()
   Else 
     CHKAUTOSTART.Value = False
   Endif
+  
+  BTNCLOSE.Picture = Picture.Load("/usr/share/draketray/ok.png")
 
 End
 Public Sub Form_Close()
