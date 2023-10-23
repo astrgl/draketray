@@ -1,5 +1,5 @@
 # Gambas Project File 3.0
-Title=DnfDrakeTray
+Title=DrakeTray
 Startup=FMain
 Icon=draketray.svg
 Version=3.0.5

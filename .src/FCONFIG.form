@@ -25,12 +25,12 @@
   { !CHKDNFDRAKE CheckBox
     MoveScaled(2,2,30,4)
     #Public = True
-    Text = ("Check updates for DnfDrake")
+    Text = ("Check system updates ")
   }
   { !CHKFLATDRAKE CheckBox
     MoveScaled(2,8,30,4)
     #Public = True
-    Text = ("Check updates for FlatDrake")
+    Text = ("Check flatpak updates")
   }
   { !CHKAUTOSTART CheckBox
     MoveScaled(2,14,30,4)

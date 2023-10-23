@@ -116,8 +116,8 @@ Public Sub Form_Open()
   
 'PAROLE CHIAVE*******************************************************************
   If Not Exist("/usr/share/dnfdrake/dnfdrake-KEY-" & $LANG) Then
-      Message.Info("Your language is unavailable, DnfDrakeTray and have been disable!", "Ok")
-      Shell ("rm -f " & User.Home &/ ".config/autostart/dnfdraketray.gambas.desktop")
+      Message.Info("Your language is unavailable, DrakeTray and have been disable!", "Ok")
+      Shell ("rm -f " & User.Home &/ ".config/autostart/draketray.gambas.desktop")
       Quit  
   Else  
       flKEY = Open "/usr/share/dnfdrake/dnfdrake-KEY-" & $LANG For Read   ' ...oppure "Input"
@@ -169,7 +169,7 @@ Public Sub Process_Read()
     File.Save(User.Home &/ "/.config/draketray/locktray", "1")
     TrayIcon1.Icon = Picture.Load("dnfdrake.svg")
     BTNDNFDRAKE.Enabled = True
-    TrayIcon1.Tooltip = "DnfDrakeTray"
+    TrayIcon1.Tooltip = "DrakeTray"
     TrayIcon1.Show
     TXTMESSAGE.Text = "Updates Available!"
     FMain.Show
