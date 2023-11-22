@@ -134,6 +134,9 @@ Public Sub Form_Open()
       flKEY.Close
   Endif     
 'TEMA DELLE ICONE**************************************************************      
+  If Not Exist(User.Home &/ "/.config/draketray/themes") Then 
+     File.Save(User.Home &/ "/.config/draketray/themes", "Oxygen")
+  Endif
   $THEMES = File.Load(User.Home &/ "/.config/draketray/themes")
   $THEMES = Replace($THEMES, " ", "")
   If $THEMES = "Oxygen" Then
