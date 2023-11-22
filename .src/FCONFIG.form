@@ -1,7 +1,7 @@
 # Gambas Form File 3.0
 
 { Form Form
-  MoveScaled(0,0,34,25)
+  MoveScaled(0,0,34,31)
   Icon = Picture["draketray.svg"]
   { BORDERCHKAUTOSTART Label
     MoveScaled(1,14,31.4286,4)
@@ -18,8 +18,15 @@
     Border = Border.Plain
     BorderRadius = 15
   }
+  { BORDERTEMA Label
+    MoveScaled(1,20,32,4)
+    Alignment = Align.Left
+    Border = Border.Plain
+    BorderRadius = 15
+    Text = (" Themes:")
+  }
   { BTNCLOSE Button
-    MoveScaled(14.4286,19.4286,5,4)
+    MoveScaled(14.4286,25.7143,5,4)
     ToolTip = ("Apply")
   }
   { !CHKDNFDRAKE CheckBox
@@ -36,5 +43,11 @@
     MoveScaled(2,14,30,4)
     #Public = True
     Text = ("Run DrakeTray on startup")
+  }
+  { CMBTHEMES ComboBox
+    MoveScaled(12.8571,20.2857,18.5714,3.5714)
+    Background = Color.Transparent
+    List = [("Oxygen"), ("Breeze"), ("Breeze Dark")]
+    Border = False
   }
 }

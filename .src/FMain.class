@@ -9,9 +9,11 @@ Public $LANG As String              'VARIABILE PER LA LINGUA DI SISTEMA
 Public $DNFDRAKECHECK As Integer    'VARIABILE CHE INDICA SE ABILITARE LA VERIFICA DI AGGIORNAMENTI PER DNFDRAKE 
 Public $FLATDRAKECHECK As Integer   'VARIABILE CHE INDICA SE ABILITARE LA VERIFICA DI AGGIORNAMENTI PER FLATDRAKE
 Public $LOCKTRAY As Integer         'VARIABILE CHE INDICA LO STATO DEGLI AGGIORNAMENTI (0=NO UPDATES 1=DNF UPDATES 2=FALPAK UPDATES)
-Public $CONFIG As Integer        'VARIABILE CHE INDICA LO STATO DELLA CONFIGURAZIONE DEGLI AGGIORNAMENTI (0=NO 1=DNFDRAKE 2=FALPAKDRALE 3=ALL)
+Public $CONFIG As Integer           'VARIABILE CHE INDICA LO STATO DELLA CONFIGURAZIONE DEGLI AGGIORNAMENTI (0=NO 1=DNFDRAKE 2=FALPAKDRALE 3=ALL)
 'Public $LOCK As Integer
 bAperto As Boolean
+Public $THEMES As String            'TEMA DELLE ICONE
+Public $THEMESSUFFIX As String      'CODA DEL NOME DELL'ICONA
 
 'RISOLUZIONE**************************************
 Public $RISOLUZIONE As String
@@ -130,6 +132,18 @@ Public Sub Form_Open()
           $WORDUPDATE = Replace(ss$KEY[3], "_", " ") 'KEY PER VERIFICA DISPONIBILITÀ AGGIORNAMENTI
       Next
       flKEY.Close
+  Endif     
+'TEMA DELLE ICONE**************************************************************      
+  $THEMES = File.Load(User.Home &/ "/.config/draketray/themes")
+  $THEMES = Replace($THEMES, " ", "")
+  If $THEMES = "Oxygen" Then
+     $THEMESSUFFIX = "-O.png"
+  Else If $THEMES = "Breeze"
+     $THEMESSUFFIX = "-B.svg"
+  Else If $THEMES = "BreezeDark"
+     $THEMESSUFFIX = "-BD.svg"    
+  Endif
+    
 '*************************************************************************************
    TrayIcon1.Icon = Picture.Load("draketray.svg")
    TrayIcon1.Tooltip = "DrakeTray"
@@ -139,19 +153,10 @@ Public Sub Form_Open()
    TMRUPDATE.Enabled = True
    bAperto = True
    File.Save(User.Home &/ "/.config/draketray/locktray", "0")
-   BTNCONFIG.Picture = Picture.Load("/usr/share/draketray/config.png")
-   BTNCHECK.Picture = Picture.Load("/usr/share/draketray/refresh.png")
-   BTNCLOSE.Picture = Picture.Load("/usr/share/draketray/ricorda.png")
-   BTNINFO.Picture = Picture.Load("/usr/share/draketray/info.png")
-   BTNQUIT.Picture = Picture.Load("/usr/share/draketray/close.png")
-   
-  Endif 
-  
+   LOADICONS
 End
 
 'CHIUSURA PROGRAMMA*******************************************************
-
-
 Public Sub Form_close() 
 $hProcess.Kill
 Shell ("rm -f " & User.Home &/ ".config/draketray/locktray")
@@ -335,6 +340,17 @@ Private Sub RESOLUTION()
   FMain.X = FMain.X + ($RISOLUZIONEX - 1366)
   FMain.Y = FMain.Y + ($RISOLUZIONEY - 768)
 End
+Public Sub LOADICONS()
+  BTNCONFIG.Picture = Picture.Load("/usr/share/draketray/config" & $THEMESSUFFIX)
+  BTNCHECK.Picture = Picture.Load("/usr/share/draketray/refresh" & $THEMESSUFFIX)
+  BTNCLOSE.Picture = Picture.Load("/usr/share/draketray/ricorda" & $THEMESSUFFIX)
+  BTNINFO.Picture = Picture.Load("/usr/share/draketray/info" & $THEMESSUFFIX)
+  BTNQUIT.Picture = Picture.Load("/usr/share/draketray/close" & $THEMESSUFFIX) 
+  BTNFLATDRAKE.Picture = Picture.Load("/usr/share/draketray/flatdrake.png") 
+  BTNDNFDRAKE.Picture = Picture.Load("/usr/share/draketray/dnfdrake.png")  
+   
+End
+
 
 Public Sub TMRSTART_Timer()
 
@@ -426,7 +442,7 @@ End
 
 Public Sub BTNQUIT_Click()
   Dim $PID As String
-  Dim iAnswer As Integer = Message.Question("Do you want to close DrakTray?", "Yes", "No")
+  Dim iAnswer As Integer = Message.Question("Do you want close DrakTray?", "Yes", "No")
       If (iAnswer = 1) Then
          Shell "ps aux | grep gbr3 | grep draketray" Wait To $PID
          $PID = Right(Left($PID, 16), 8)
