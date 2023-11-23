@@ -72,7 +72,7 @@ Public Sub Form_Close()
   Endif
    If CMBTHEMES.Index = 0 Then
       File.Save(User.Home &/ "/.config/draketray/themes", "Oxygen")
-      FMain.$THEMES = "Oxygene"
+      FMain.$THEMES = "Oxygen"
       FMain.$THEMESSUFFIX = "-O.png"
       FMain.LOADICONS
    Else If CMBTHEMES.Index = 1 Then

@@ -190,7 +190,7 @@ Public Sub Process_Read()
     TMRUPDATE.Delay = 7200000
     TMRUPDATE.Enabled = True
     If $DNFDRAKECHECK = 1 And If $FLATDRAKECHECK = 1 Then
-     BTNCLOSE.Picture = Picture.Load("/usr/share/draketray/prossimo.png")
+     BTNCLOSE.Picture = Picture.Load("/usr/share/draketray/prossimo" & $THEMESSUFFIX)
      BTNCLOSE.Tooltip = "Look for other updates"
      BTNDNFDRAKE.SetFocus
     Endif
@@ -217,7 +217,7 @@ Public Sub Process_Read()
     TMRUPDATE.Delay = 7200000
     TMRUPDATE.Enabled = True
     If $DNFDRAKECHECK = 1 And If $FLATDRAKECHECK = 1 Then
-     BTNCLOSE.Picture = Picture.Load("/usr/share/draketray/ricorda.png")
+     BTNCLOSE.Picture = Picture.Load("/usr/share/draketray/ricorda" & $THEMESSUFFIX)
      BTNCLOSE.Tooltip = "Remember later"
      BTNDNFDRAKE.SetFocus
     Endif
@@ -405,7 +405,7 @@ Public Sub BTNCLOSE_Click()
   TXTMESSAGE.Text = "System Updated!"
   TrayIcon1.Icon = Picture.Load("draketray.svg")
   TrayIcon1.Tooltip = "DrakeTray"
-  BTNCLOSE.Picture = Picture.Load("/usr/share/draketray/ricorda.png")
+  BTNCLOSE.Picture = Picture.Load("/usr/share/draketray/ricorda" & $THEMESSUFFIX)
   BTNDNFDRAKE.Enabled = False
   BTNFLATDRAKE.Enabled = False
   TrayIcon1.hide
