@@ -246,14 +246,14 @@ Private Sub DNFDRAKE()
   Shell ("/usr/bin/dnfdrake.gambas")
   TXTMESSAGE.Text = "System Updated!"
   TrayIcon1.Icon = Picture.Load("draketray.svg")
-  BTNCLOSE.Picture = Picture.Load("/usr/share/draketray/ricorda.png")
+  BTNCLOSE.Picture = Picture.Load("/usr/share/draketray/ricorda" & $THEMESSUFFIX)
   BTNDNFDRAKE.Enabled = False
 End
 Private Sub FLATDRAKE()
   Shell ("/usr/bin/flatdrake.gambas") 
   TXTMESSAGE.Text = "System Updated!"
   TrayIcon1.Icon = Picture.Load("draketray.svg")
-  BTNCLOSE.Picture = Picture.Load("/usr/share/draketray/ricorda.png") 
+  BTNCLOSE.Picture = Picture.Load("/usr/share/draketray/ricorda" & $THEMESSUFFIX) 
   BTNFLATDRAKE.Enabled = False
 End
 Private Sub UPGRADESDNFDRAKE()

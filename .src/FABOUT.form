@@ -9,7 +9,7 @@
     Alignment = Align.Center
     Border = Border.Plain
     BorderRadius = 30
-    Text = ("DrakeTray 3.5.4")
+    Text = ("DrakeTray 3.5.5")
   }
   { BTNCLOSE Button
     MoveScaled(24,72.1429,16,4)
