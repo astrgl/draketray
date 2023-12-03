@@ -118,7 +118,7 @@ Public Sub Form_Open()
   Endif
   
 'PAROLE CHIAVE*******************************************************************
-  If Not Exist("/usr/share/dnfdrake/dnfdrake-KEY-" & $LANG) Then
+  If Not Exist("/usr/share/dnfdrake/draketray-KEY-" & $LANG) Then
       Message.Info("Your language is unavailable, DrakeTray and have been disable!", "Ok")
       Shell ("rm -f " & User.Home &/ ".config/autostart/draketray.gambas.desktop")
       Quit  
