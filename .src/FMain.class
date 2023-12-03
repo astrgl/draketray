@@ -14,6 +14,7 @@ Public $CONFIG As Integer           'VARIABILE CHE INDICA LO STATO DELLA CONFIGU
 bAperto As Boolean
 Public $THEMES As String            'TEMA DELLE ICONE
 Public $THEMESSUFFIX As String      'CODA DEL NOME DELL'ICONA
+Public $PATHICONS As String         'PATH DELLE ICONE
 
 'RISOLUZIONE**************************************
 Public $RISOLUZIONE As String
@@ -134,21 +135,57 @@ Public Sub Form_Open()
       flKEY.Close
   Endif     
 'TEMA DELLE ICONE**************************************************************      
-  If Not Exist(User.Home &/ "/.config/draketray/themes") Then 
-     File.Save(User.Home &/ "/.config/draketray/themes", "Oxygen")
-  Endif
-  $THEMES = File.Load(User.Home &/ "/.config/draketray/themes")
-  $THEMES = Replace($THEMES, " ", "")
-  If $THEMES = "Oxygen" Then
-     $THEMESSUFFIX = "-O.png"
-  Else If $THEMES = "Breeze"
-     $THEMESSUFFIX = "-B.svg"
-  Else If $THEMES = "BreezeDark"
-     $THEMESSUFFIX = "-BD.svg"    
-  Endif
+  ' If Exist(User.Home &/ ".config/kdeglobals") Then 
+  '   Message.Info("esiste", "ok") 
+  '   Dim flTEMA As File  
+  '   Dim jTEMA As Byte
+  '   Dim s$TEMA As String
+  '   Dim ss$TEMA As New String[]
+  '   flTEMA = Open User.Home &/ ".config/kdeglobals" For Read
+  '   While Not Eof(flTEMA)
+  '         Input #flTEMA, s$TEMA
+  '         ss$TEMA.Add(s$TEMA)
+  '   Wend
+  '   Close #flTEMA
+  '     For jTEMA = 0 To ss$TEMA.Max
+  '         If InStr(ss$TEMA[162], "Dark") > 0 Then
+  '            $THEMESSUFFIX = "-BD.svg"    
+  '            jTEMA = ss$TEMA.Max
+  '         Else 
+  '           $THEMESSUFFIX = "-B.svg"
+  '         Endif
+  '     Next
+  '     flKEY.Close
+  '   
+  ' Else 
+     If Not Exist(User.Home &/ "/.config/draketray/themes") Then 
+     Dim iTEMA As Integer = Message.Question("What icon theme would you like to use in DrakeTray?", "Oxygen", "Breeze", "Breeze Dark")
+      If (iTEMA = 1) Then
+         File.Save(User.Home &/ "/.config/draketray/themes", "Oxygen")
+      Else If (iTEMA = 2)
+         File.Save(User.Home &/ "/.config/draketray/themes", "Breeze")
+      Else If (iTEMA = 3)
+         File.Save(User.Home &/ "/.config/draketray/themes", "BreezeDark")   
+      Endif 
+     Endif
+      $THEMES = File.Load(User.Home &/ "/.config/draketray/themes")
+      $THEMES = Replace($THEMES, " ", "")
+      If $THEMES = "Oxygen" Then
+         $THEMESSUFFIX = ".png"
+       Else If $THEMES = "Breeze"
+         $THEMESSUFFIX = "-B.svg"
+      Else If $THEMES = "BreezeDark"
+         $THEMESSUFFIX = "-BD.svg"    
+     Endif
+     If Exist("/usr/share/draketray/icons") Then
+       $PATHICONS = "/usr/share/draketray/icons/"
+     Else   
+       $PATHICONS = "/usr/share/draketray/"       
+     Endif
+  ' Endif
     
 '*************************************************************************************
-   TrayIcon1.Icon = Picture.Load("draketray.svg")
+   TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.svg")
    TrayIcon1.Tooltip = "DrakeTray"
    TrayIcon1.Show
    TrayIcon1_Click
@@ -175,7 +212,7 @@ Public Sub Process_Read()
 'VERIFICA AGGIORNAMENTI DNFDRAKE*******************************************
   If InStr($sText, $WORDUPDATE) > 0 Then                          
     File.Save(User.Home &/ "/.config/draketray/locktray", "1")
-    TrayIcon1.Icon = Picture.Load("dnfdrake.svg")
+    TrayIcon1.Icon = Picture.Load($PATHICONS & "dnfdrake.svg")
     BTNDNFDRAKE.Enabled = True
     TrayIcon1.Tooltip = "DrakeTray"
     TrayIcon1.Show
@@ -190,7 +227,7 @@ Public Sub Process_Read()
     TMRUPDATE.Delay = 7200000
     TMRUPDATE.Enabled = True
     If $DNFDRAKECHECK = 1 And If $FLATDRAKECHECK = 1 Then
-     BTNCLOSE.Picture = Picture.Load("/usr/share/draketray/prossimo" & $THEMESSUFFIX)
+     BTNCLOSE.Picture = Picture.Load($PATHICONS & "prossimo" & $THEMESSUFFIX)
      BTNCLOSE.Tooltip = "Look for other updates"
      BTNDNFDRAKE.SetFocus
     Endif
@@ -201,7 +238,7 @@ Public Sub Process_Read()
        Print #$hProcess, "N" & gb.NewLine; 
     Endif
     File.Save(User.Home &/ "/.config/draketray/locktray", "2")
-    TrayIcon1.Icon = Picture.Load("flatdrake.svg")
+    TrayIcon1.Icon = Picture.Load($PATHICONS & "flatdrake.svg")
     BTNFLATDRAKE.Enabled = True
     TrayIcon1.Tooltip = "FlatDrakeTray"
     TrayIcon1.Show
@@ -217,7 +254,7 @@ Public Sub Process_Read()
     TMRUPDATE.Delay = 7200000
     TMRUPDATE.Enabled = True
     If $DNFDRAKECHECK = 1 And If $FLATDRAKECHECK = 1 Then
-     BTNCLOSE.Picture = Picture.Load("/usr/share/draketray/ricorda" & $THEMESSUFFIX)
+     BTNCLOSE.Picture = Picture.Load($PATHICONS & "ricorda" & $THEMESSUFFIX)
      BTNCLOSE.Tooltip = "Remember later"
      BTNDNFDRAKE.SetFocus
     Endif
@@ -245,15 +282,15 @@ End
 Private Sub DNFDRAKE()
   Shell ("/usr/bin/dnfdrake.gambas")
   TXTMESSAGE.Text = "System Updated!"
-  TrayIcon1.Icon = Picture.Load("draketray.svg")
-  BTNCLOSE.Picture = Picture.Load("/usr/share/draketray/ricorda" & $THEMESSUFFIX)
+  TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.svg")
+  BTNCLOSE.Picture = Picture.Load($PATHICONS & "ricorda" & $THEMESSUFFIX)
   BTNDNFDRAKE.Enabled = False
 End
 Private Sub FLATDRAKE()
   Shell ("/usr/bin/flatdrake.gambas") 
   TXTMESSAGE.Text = "System Updated!"
-  TrayIcon1.Icon = Picture.Load("draketray.svg")
-  BTNCLOSE.Picture = Picture.Load("/usr/share/draketray/ricorda" & $THEMESSUFFIX) 
+  TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.svg")
+  BTNCLOSE.Picture = Picture.Load($PATHICONS & "ricorda" & $THEMESSUFFIX) 
   BTNFLATDRAKE.Enabled = False
 End
 Private Sub UPGRADESDNFDRAKE()
@@ -344,13 +381,13 @@ Private Sub RESOLUTION()
   FMain.Y = FMain.Y + ($RISOLUZIONEY - 768)
 End
 Public Sub LOADICONS()
-  BTNCONFIG.Picture = Picture.Load("/usr/share/draketray/config" & $THEMESSUFFIX)
-  BTNCHECK.Picture = Picture.Load("/usr/share/draketray/refresh" & $THEMESSUFFIX)
-  BTNCLOSE.Picture = Picture.Load("/usr/share/draketray/ricorda" & $THEMESSUFFIX)
-  BTNINFO.Picture = Picture.Load("/usr/share/draketray/info" & $THEMESSUFFIX)
-  BTNQUIT.Picture = Picture.Load("/usr/share/draketray/close" & $THEMESSUFFIX) 
-  BTNFLATDRAKE.Picture = Picture.Load("/usr/share/draketray/flatdrake.png") 
-  BTNDNFDRAKE.Picture = Picture.Load("/usr/share/draketray/dnfdrake.png")  
+  BTNCONFIG.Picture = Picture.Load($PATHICONS & "config" & $THEMESSUFFIX)
+  BTNCHECK.Picture = Picture.Load($PATHICONS & "refresh" & $THEMESSUFFIX)
+  BTNCLOSE.Picture = Picture.Load($PATHICONS & "ricorda" & $THEMESSUFFIX)
+  BTNINFO.Picture = Picture.Load($PATHICONS & "info" & $THEMESSUFFIX)
+  BTNQUIT.Picture = Picture.Load($PATHICONS & "close" & $THEMESSUFFIX) 
+  BTNFLATDRAKE.Picture = Picture.Load($PATHICONS & "flatdrake.png") 
+  BTNDNFDRAKE.Picture = Picture.Load($PATHICONS & "dnfdrake.png")  
    
 End
 
@@ -403,9 +440,9 @@ End
 Public Sub BTNCLOSE_Click()
   File.Save(User.Home &/ "/.config/draketray/locktray", "0")
   TXTMESSAGE.Text = "System Updated!"
-  TrayIcon1.Icon = Picture.Load("draketray.svg")
+  TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.svg")
   TrayIcon1.Tooltip = "DrakeTray"
-  BTNCLOSE.Picture = Picture.Load("/usr/share/draketray/ricorda" & $THEMESSUFFIX)
+  BTNCLOSE.Picture = Picture.Load($PATHICONS & "ricorda" & $THEMESSUFFIX)
   BTNDNFDRAKE.Enabled = False
   BTNFLATDRAKE.Enabled = False
   TrayIcon1.hide
@@ -478,5 +515,4 @@ Public Sub BTNCHECK_Click()
 
 End
 Public Sub Label3_MouseDown()
-
 End
