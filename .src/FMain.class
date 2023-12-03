@@ -123,7 +123,7 @@ Public Sub Form_Open()
       Shell ("rm -f " & User.Home &/ ".config/autostart/draketray.gambas.desktop")
       Quit  
   Else  
-      flKEY = Open "/usr/share/draketray/dnfdrake-KEY-" & $LANG For Read   ' ...oppure "Input"
+      flKEY = Open "/usr/share/draketray/draketray-KEY-" & $LANG For Read   ' ...oppure "Input"
         While Not Eof(flKEY)
           Input #flKEY, s$KEY
           ss$KEY.Add(s$KEY)
