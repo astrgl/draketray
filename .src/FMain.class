@@ -15,6 +15,7 @@ bAperto As Boolean
 Public $THEMES As String            'TEMA DELLE ICONE
 Public $THEMESSUFFIX As String      'CODA DEL NOME DELL'ICONA
 Public $PATHICONS As String         'PATH DELLE ICONE
+Public $CONNECTION As Integer       'STATO CONNESSIONE INTERNET 0=DISCONNESSO 1=CONNESSO
 
 'RISOLUZIONE**************************************
 Public $RISOLUZIONE As String
@@ -360,7 +361,23 @@ Private Sub UPGRADESFLATDRAKE()
       flTRAY.Close
   Endif 
   If $FLATDRAKECHECK = 1 And If $LOCKTRAY <> 1 Then
-   Print #$hProcess, "flatpak update" & gb.NewLine;  
+    'VERIFICA SE FLATDRAKE È IN ESECUZIONE NEL CASO SALTA LA VERIFICA
+   Dim $LOCK As String
+   Dim $LOCKVAL As Integer
+   Shell "ps aux | grep gbr3 | grep -w flatdrake.gambas | wc -l" Wait To $LOCK 
+   $LOCKVAL = CInteger(Val(Right(Left($LOCK))))
+   If $LOCKVAL < 2 Then
+'PRECARICAMENTO LISTE FLATDRAKE********************************************
+    Shell "dnf list > " & User.Home &/ ".config/flatdrake/repo.txt" Wait 
+    Shell "flatpak list |expand -t 60,135,160,175,185 >" & User.Home &/ ".config/flatdrake/installati.txt" Wait
+    Shell "flatpak remote-ls |expand -t 60,135,160,175,185 >" & User.Home &/ ".config/flatdrake/noninstallati.txt" Wait
+    Shell "flatpak update |expand -t 05,10,85,95,100,110,115 >" & User.Home &/ ".config/flatdrake/updates.txt |echo n" Wait
+    ''Message.info("liste caricate  " & $LOCKVAL, "ok")  
+'VERIFICA SE DISPONIBILI AGGIORNAMENTI*************************************  
+   Print #$hProcess, "flatpak update" & gb.NewLine;
+   Else 
+   'Message.info("salto giro flat  " & $LOCKVAL, "ok")  
+   Endif   
    TMRUPDATE.Delay = 7200000
    $TMRUPDATEVENT = 1
   Else 
@@ -380,6 +397,22 @@ Private Sub RESOLUTION()
   FMain.X = FMain.X + ($RISOLUZIONEX - 1366)
   FMain.Y = FMain.Y + ($RISOLUZIONEY - 768)
 End
+Private Sub CHECKCONNECTION()
+Dim sOutput As String
+Dim sTemp As String = "8.8.8.8"  
+   Shell "ping -c1 -w1 8.8.8.8" To sOutput
+  ' Exec ["ping ", "-c1 " "-w1 ", sTemp] To sOutput                                    'Ping the target and store the output in sOutput"
+    If InStr(sOutput, "64 bytes from") Then                                               'If '64 bytes from' exists in sOutput then..
+      $CONNECTION = 1
+     ' Message.Info("CONNESSIONE=" & $CONNECTION, "ok")   
+    Else 
+      $CONNECTION = 0
+     ' Message.Info("CONNESSIONE=" & $CONNECTION, "ok")                                                  
+    End If 
+    
+End
+
+
 Public Sub LOADICONS()
   BTNCONFIG.Picture = Picture.Load($PATHICONS & "config" & $THEMESSUFFIX)
   BTNCHECK.Picture = Picture.Load($PATHICONS & "refresh" & $THEMESSUFFIX)
@@ -410,16 +443,24 @@ End
 
 Public Sub TMRUPDATE_Timer() 
  BTNCHECK.Enabled = True
- If $TMRUPDATEVENT = 0 Then
-  $TMRUPDATEVENT = 1
-  TrayIcon1.hide
-  TMRUPDATE.Delay = 180000 
-  'TMRUPDATE.Delay = 3000 'RIDOTTO PER TEST
-  Else If $TMRUPDATEVENT = 1 Then
+ CHECKCONNECTION
+ Wait 0.5
+ If $CONNECTION = 1 Then
+    If $TMRUPDATEVENT = 0 Then
+       $TMRUPDATEVENT = 1
+       TrayIcon1.hide
+       TMRUPDATE.Delay = 180000 
+      'TMRUPDATE.Delay = 3000 'RIDOTTO PER TEST
+    Else If $TMRUPDATEVENT = 1 Then
        UPGRADESDNFDRAKE
-  Else If $TMRUPDATEVENT = 2 Then
+    Else If $TMRUPDATEVENT = 2 Then
        UPGRADESFLATDRAKE
-  Endif
+    Endif
+ Else 
+    TMRUPDATE.Delay = 180000
+    'TMRUPDATE.Delay = 3000 'RIDOTTO PER TEST
+    'Message.Info("ripovo tra ", "ok")  
+ Endif   
 End
 
 'ALTRI COMANDI*******************************************
@@ -516,3 +557,4 @@ Public Sub BTNCHECK_Click()
 End
 Public Sub Label3_MouseDown()
 End
+
