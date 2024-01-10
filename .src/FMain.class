@@ -465,8 +465,11 @@ End
 
 'ALTRI COMANDI*******************************************
 
-Public Sub TXTMESSAGE_MouseDown()
-
+Public Sub TXTMESSAGE_DblClick()
+  TrayIcon1_Click
+End
+Public Sub TXTMESSAGE_Menu()
+  TrayIcon1_Click  
 End
 
 
@@ -555,6 +558,11 @@ Public Sub BTNCHECK_Click()
   TrayIcon1_Click  
 
 End
-Public Sub Label3_MouseDown()
+Public Sub LBLBACKGROUND_DblClick()
+  TrayIcon1_Click
 End
+Public Sub LBLBACKGROUND_Menu()
+  TrayIcon1_Click
+End
+
 

@@ -6,9 +6,17 @@
   Icon = Picture["draketray.svg"]
   Resizable = False
   Border = False
-  { Label3 Label
+  { LBLBACKGROUND Label
     MoveScaled(0,0,40,17)
-    Border = Border.Plain
+    ToolTip = ("Doubleclick or Rightclick for Hide")
+  }
+  { Label1 Label
+    MoveScaled(0,0.1429,3.5714,3.5714)
+    BorderRadius = 15
+  }
+  { Label2 Label
+    MoveScaled(36.2857,0,3.5714,3.5714)
+    BorderRadius = 15
   }
   { TXTLANG Label
     MoveScaled(23,2,4,4)
@@ -36,10 +44,6 @@
     BorderRadius = 20
     Text = ("System Updated!")
   }
-  { Label2 Label
-    MoveScaled(36.2857,0,3.5714,3.5714)
-    BorderRadius = 15
-  }
   { BTNQUIT Button
     MoveScaled(36.7143,0.4286,3,3)
     ToolTip = ("Quit DrakeTray")
@@ -64,12 +68,8 @@
     MoveScaled(12,11,5,4)
     ToolTip = ("Configure DrakeTray")
   }
-  { Label1 Label
-    MoveScaled(0,0.1429,3.5714,3.5714)
-    BorderRadius = 15
-  }
   { BTNINFO Button
-    MoveScaled(1,1,1.7143,1.7143)
+    MoveScaled(0.4286,0.4286,3,3)
     ToolTip = ("About")
     Border = False
   }
