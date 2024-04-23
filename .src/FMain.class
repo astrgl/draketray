@@ -186,7 +186,13 @@ Public Sub Form_Open()
   ' Endif
     
 '*************************************************************************************
-   TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.svg")
+'GESTIONE ERRORE PER ASSENZA ICONE A CAUSA DI SPEC ERRATO IN  OPENMANDRIVA ***********
+   Try TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.svg")
+   If Error Then
+     $PATHICONS = "/usr/share/draketray/"
+     TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.svg")
+   Endif
+'**************************************************************************************
    TrayIcon1.Tooltip = "DrakeTray"
    TrayIcon1.Show
    TrayIcon1_Click
@@ -564,5 +570,3 @@ End
 Public Sub LBLBACKGROUND_Menu()
   TrayIcon1_Click
 End
-
-

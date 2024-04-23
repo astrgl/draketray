@@ -13,3 +13,9 @@ Public Sub Form_Open()
   TextArea1.Text = File.Load("/usr/share/draketray/draketray-ABOUT-en_US")
   BTNCLOSE.Picture = Picture.Load(FMain.$PATHICONS & "close" & FMain.$THEMESSUFFIX)
 End
+
+Public Sub Label1_MouseDown()
+
+  
+
+End
