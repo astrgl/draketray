@@ -8,6 +8,7 @@
   Border = False
   { LBLBACKGROUND Label
     MoveScaled(0,0,40,17)
+    Visible = False
     ToolTip = ("Doubleclick or Rightclick for Hide")
   }
   { Label1 Label
@@ -30,6 +31,7 @@
   }
   { TMRUPDATE #Timer
     #MoveScaled(9,2)
+    Delay = 10000
   }
   { !TrayIcon1 #TrayIcon
     #MoveScaled(2,2)

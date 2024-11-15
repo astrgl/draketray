@@ -16,6 +16,8 @@ Public $THEMES As String            'TEMA DELLE ICONE
 Public $THEMESSUFFIX As String      'CODA DEL NOME DELL'ICONA
 Public $PATHICONS As String         'PATH DELLE ICONE
 Public $CONNECTION As Integer       'STATO CONNESSIONE INTERNET 0=DISCONNESSO 1=CONNESSO
+Public $STARTUP As Integer          'SERVE A NASCONDERE L'ICONA NELLA TRAY ALL'AVVIO
+Public $SPEEDCHECH As Integer       'SERVE A FAR ESEGUIRE IL CECK UPDATE IMMEDIATAMENTE
 
 'RISOLUZIONE**************************************
 Public $RISOLUZIONE As String
@@ -196,6 +198,8 @@ Public Sub Form_Open()
    TrayIcon1.Tooltip = "DrakeTray"
    TrayIcon1.Show
    TrayIcon1_Click
+   $TMRUPDATEVENT = 0
+   $SPEEDCHECH = 0
    TMRSTART.Enabled = True
    TMRUPDATE.Enabled = True
    bAperto = True
@@ -340,6 +344,7 @@ If $DNFDRAKECHECK = 1 And If $LOCKTRAY <> 2 Then
        TMRUPDATE.Delay = 10000
     Else   
        TMRUPDATE.Delay = 7200000
+       'TMRUPDATE.Delay = 5000
     Endif
    'Message.Info(TMRUPDATE.Delay, "ok")
    $TMRUPDATEVENT = 2
@@ -413,7 +418,7 @@ Dim sTemp As String = "8.8.8.8"
      ' Message.Info("CONNESSIONE=" & $CONNECTION, "ok")   
     Else 
       $CONNECTION = 0
-     ' Message.Info("CONNESSIONE=" & $CONNECTION, "ok")                                                  
+      'Message.Info("CONNESSIONE=" & $CONNECTION, "ok")                                                  
     End If 
     
 End
@@ -432,14 +437,17 @@ End
 
 
 Public Sub TMRSTART_Timer()
-
+  
   If Not Exist(User.Home &/ ".config/draketray/locktray") Then
      File.Save(User.Home &/ "/.config/draketray/locktray", "0")
   Endif
   If bAperto = True Then
   TrayIcon1_Click  
+    If $STARTUP = 0 Then
+      TrayIcon1.Hide
+      $STARTUP = 1  
+    Endif
   Endif
-  
   TMRSTART.Enabled = False
 
 End
@@ -450,13 +458,18 @@ End
 Public Sub TMRUPDATE_Timer() 
  BTNCHECK.Enabled = True
  CHECKCONNECTION
- Wait 0.5
+ Wait 1
  If $CONNECTION = 1 Then
     If $TMRUPDATEVENT = 0 Then
        $TMRUPDATEVENT = 1
        TrayIcon1.hide
-       TMRUPDATE.Delay = 180000 
-      'TMRUPDATE.Delay = 3000 'RIDOTTO PER TEST
+          If $SPEEDCHECH = 1 Then
+              TMRUPDATE.Delay = 500
+              $SPEEDCHECH = 0
+          Else 
+              TMRUPDATE.Delay = 180000     
+              'TMRUPDATE.Delay = 3000 'RIDOTTO PER TEST
+          Endif
     Else If $TMRUPDATEVENT = 1 Then
        UPGRADESDNFDRAKE
     Else If $TMRUPDATEVENT = 2 Then
@@ -558,8 +571,9 @@ End
 
 
 Public Sub BTNCHECK_Click()
-
+  $SPEEDCHECH = 1
   TMRUPDATE.Delay = 1
+  TMRUPDATE.Enabled = True
   BTNCHECK.Enabled = False
   TrayIcon1_Click  
 
