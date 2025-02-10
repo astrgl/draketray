@@ -12,9 +12,10 @@ Public Sub Form_Open()
 
   TextArea1.Text = File.Load("/usr/share/draketray/draketray-ABOUT-en_US")
   BTNCLOSE.Picture = Picture.Load(FMain.$PATHICONS & "close" & FMain.$THEMESSUFFIX)
+  LBLTITOLO.Text = "DrakeTray " & Application.Version
 End
 
-Public Sub Label1_MouseDown()
+Public Sub LBLTITOLO_MouseDown()
 
   
 
