@@ -49,6 +49,9 @@ Public Sub Form_Open()
    If Not Exist(User.Home &/ ".config/draketray/") Then
       Mkdir User.Home &/ "/.config/draketray/"
    Endif
+   If Not Exist("/tmp/draketray/") Then
+      Mkdir "/tmp/draketray/"
+   Endif
  'lettura della lingua di sistema************************************************************
  
  txtlang.Text = Left(Right(System.Language, -3), 2)
@@ -123,7 +126,7 @@ Public Sub Form_Open()
 'PAROLE CHIAVE*******************************************************************
   If Not Exist("/usr/share/draketray/draketray-KEY-" & $LANG) Then
       Message.Info("Your language is unavailable, DrakeTray and have been disable!", "Ok")
-      Shell ("rm -f " & User.Home &/ ".config/autostart/draketray.gambas.desktop")
+      Kill User.Home &/ ".config/autostart/draketray.gambas.desktop"
       Quit  
   Else  
       flKEY = Open "/usr/share/draketray/draketray-KEY-" & $LANG For Read   ' ...oppure "Input"
@@ -203,14 +206,14 @@ Public Sub Form_Open()
    TMRSTART.Enabled = True
    TMRUPDATE.Enabled = True
    bAperto = True
-   File.Save(User.Home &/ "/.config/draketray/locktray", "0")
+   File.Save("/tmp/draketray/locktray", "0")
    LOADICONS
 End
 
 'CHIUSURA PROGRAMMA*******************************************************
 Public Sub Form_close() 
 $hProcess.Kill
-Shell ("rm -f " & User.Home &/ ".config/draketray/locktray")
+Kill "/tmp/draketray/locktray"
 TrayIcon1.Delete
 End 
 'PROCESSO DI SISTEMA*******************************************************End
@@ -222,7 +225,7 @@ Public Sub Process_Read()
   $sText = $sText & sStr
 'VERIFICA AGGIORNAMENTI DNFDRAKE*******************************************
   If InStr($sText, $WORDUPDATE) > 0 Then                          
-    File.Save(User.Home &/ "/.config/draketray/locktray", "1")
+    File.Save("/tmp/draketray/locktray", "1")
     TrayIcon1.Icon = Picture.Load($PATHICONS & "dnfdrake.svg")
     BTNDNFDRAKE.Enabled = True
     TrayIcon1.Tooltip = "DrakeTray"
@@ -248,7 +251,7 @@ Public Sub Process_Read()
     If InStr($sText, "[Y/n]") Then
        Print #$hProcess, "N" & gb.NewLine; 
     Endif
-    File.Save(User.Home &/ "/.config/draketray/locktray", "2")
+    File.Save("/tmp/draketray/locktray", "2")
     TrayIcon1.Icon = Picture.Load($PATHICONS & "flatdrake.svg")
     BTNFLATDRAKE.Enabled = True
     TrayIcon1.Tooltip = "FlatDrakeTray"
@@ -291,7 +294,8 @@ Public Sub Form_LostFocus()
 End 
 
 Private Sub DNFDRAKE()
-  Shell ("/usr/bin/dnfdrake.gambas")
+  Shell "pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY /home/mauro/dnfdrake.gambas"
+  'Shell ("/usr/bin/dnfdrake.gambas")
   TXTMESSAGE.Text = "System Updated!"
   TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.svg")
   BTNCLOSE.Picture = Picture.Load($PATHICONS & "ricorda" & $THEMESSUFFIX)
@@ -310,8 +314,8 @@ Private Sub UPGRADESDNFDRAKE()
  Dim jTRAY As Byte
  Dim s$TRAY As String
  Dim ss$TRAY As New String[]
- If Exist(User.Home &/ "/.config/draketray/locktray") Then
-    flTRAY = Open User.Home &/ ".config/draketray/locktray" For Read 
+ If Exist("/tmp/draketray/locktray") Then
+    flTRAY = Open "/tmp/draketray/locktray" For Read 
       While Not Eof(flTRAY)
         Input #flTRAY, s$TRAY
         ss$TRAY.Add(s$TRAY)
@@ -332,9 +336,12 @@ If $DNFDRAKECHECK = 1 And If $LOCKTRAY <> 2 Then
    If $LOCKVAL < 2 Then
 'PRECARICAMENTO LISTE PER DNFDRAKE
    'Message.info("nuovo giro  " & $LOCKVAL, "ok")
-      Shell "dnf list installed >" & User.Home &/ ".config/dnfdrake/installati.txt" Wait
-      Shell "dnf list available >" & User.Home &/ ".config/dnfdrake/noninstallati.txt" Wait
-      Shell "dnf list upgrades >" & User.Home &/ ".config/dnfdrake/updates.txt" Wait
+      Shell "dnf list installed > /tmp/draketray/installati.txt" Wait
+      Shell "dnf list available > /tmp/draketray/noninstallati.txt" Wait
+      Shell "dnf list upgrades > /tmp/draketray/updates.txt" Wait
+      ' Shell "dnf list installed >" & User.Home &/ ".config/dnfdrake/installati.txt" Wait
+      ' Shell "dnf list available >" & User.Home &/ ".config/dnfdrake/noninstallati.txt" Wait
+      ' Shell "dnf list upgrades >" & User.Home &/ ".config/dnfdrake/updates.txt" Wait
 'VERIFICA SE DISPONIBILI AGGIORNAMENTI 
       Print #$hProcess, "dnf list upgrades" & gb.NewLine; 
    Else 
@@ -359,8 +366,8 @@ Private Sub UPGRADESFLATDRAKE()
  Dim jTRAY As Byte
  Dim s$TRAY As String
  Dim ss$TRAY As New String[]
- If Exist(User.Home &/ "/.config/draketray/locktray") Then
-      flTRAY = Open User.Home &/ ".config/draketray/locktray" For Read 
+ If Exist("/tmp/draketray/locktray") Then
+      flTRAY = Open "/tmp/draketray/locktray" For Read 
       While Not Eof(flTRAY)
         Input #flTRAY, s$TRAY
         ss$TRAY.Add(s$TRAY)
@@ -438,8 +445,8 @@ End
 
 Public Sub TMRSTART_Timer()
   
-  If Not Exist(User.Home &/ ".config/draketray/locktray") Then
-     File.Save(User.Home &/ "/.config/draketray/locktray", "0")
+  If Not Exist("/tmp/draketray/locktray") Then
+     File.Save("/tmp/draketray/locktray", "0")
   Endif
   If bAperto = True Then
   TrayIcon1_Click  
@@ -501,7 +508,7 @@ Public Sub BTNDNFDRAKE_Click()
 End
 
 Public Sub BTNCLOSE_Click()
-  File.Save(User.Home &/ "/.config/draketray/locktray", "0")
+  File.Save("/tmp/draketray/locktray", "0")
   TXTMESSAGE.Text = "System Updated!"
   TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.svg")
   TrayIcon1.Tooltip = "DrakeTray"
@@ -550,7 +557,7 @@ Public Sub BTNQUIT_Click()
          Shell "ps aux | grep gbr3 | grep draketray" Wait To $PID
          $PID = Right(Left($PID, 16), 8)
          Shell "kill " & $PID
-         Shell ("rm -f " & User.Home &/ ".config/draketray/locktray")
+         Kill "/tmp/draketray/locktray"
       Else
           Stop Event
       Endif 
