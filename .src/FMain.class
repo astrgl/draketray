@@ -294,7 +294,7 @@ Public Sub Form_LostFocus()
 End 
 
 Private Sub DNFDRAKE()
-  Shell "pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY /home/mauro/dnfdrake.gambas"
+  Shell "pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY /usr/bin/dnfdrake.gambas"
   'Shell ("/usr/bin/dnfdrake.gambas")
   TXTMESSAGE.Text = "System Updated!"
   TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.svg")
