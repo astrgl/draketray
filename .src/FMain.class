@@ -337,6 +337,7 @@ If $DNFDRAKECHECK = 1 And If $LOCKTRAY <> 2 Then
    If $LOCKVAL < 2 Then
 'PRECARICAMENTO LISTE PER DNFDRAKE
    'Message.info("nuovo giro  " & $LOCKVAL, "ok")
+      Shell "dnf clean all" Wait 
       Shell "dnf list installed > /tmp/draketray/installati.txt" Wait
       Shell "dnf list available > /tmp/draketray/noninstallati.txt" Wait
       Shell "dnf list upgrades > /tmp/draketray/updates.txt" Wait
