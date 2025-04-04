@@ -12,5 +12,6 @@ Description="DrakeTray is a tray updates notifier for DnfDrake and Flatdrake"
 Authors="Mauro Carbini (aka Astragalo) mauro.carbini@gmail.com"
 TabSize=2
 Language=en_US
+SourcePath=/home/mauro/src/rpm/SOURCES
 Vendor=Astragalo
 Packager=1
