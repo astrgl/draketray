@@ -10,7 +10,7 @@ Public $DNFDRAKECHECK As Integer    'VARIABILE CHE INDICA SE ABILITARE LA VERIFI
 Public $FLATDRAKECHECK As Integer   'VARIABILE CHE INDICA SE ABILITARE LA VERIFICA DI AGGIORNAMENTI PER FLATDRAKE
 Public $LOCKTRAY As Integer         'VARIABILE CHE INDICA LO STATO DEGLI AGGIORNAMENTI (0=NO UPDATES 1=DNF UPDATES 2=FALPAK UPDATES)
 Public $CONFIG As Integer           'VARIABILE CHE INDICA LO STATO DELLA CONFIGURAZIONE DEGLI AGGIORNAMENTI (0=NO 1=DNFDRAKE 2=FALPAKDRALE 3=ALL)
-'Public $LOCK As Integer
+Public $READSWITCH As Integer         'VARIABILE CHE GESTISCE LA LETTURA DEL PROCESSO IN BASE AL CONTROLLO IN CORSO DNF O FLADRAKE
 bAperto As Boolean
 Public $THEMES As String            'TEMA DELLE ICONE
 Public $THEMESSUFFIX As String      'CODA DEL NOME DELL'ICONA
@@ -224,6 +224,7 @@ Public Sub Process_Read()
   Read #$hProcess, sStr, -2560 '-2560 sembra risolvere i problemi in listpkg e i blocchi durante i comandi
   $sText = $sText & sStr
 'VERIFICA AGGIORNAMENTI DNFDRAKE*******************************************
+ If $READSWITCH = 1 Then
   If InStr($sText, $WORDUPDATE) > 0 Then                          
     File.Save("/tmp/draketray/locktray", "1")
     TrayIcon1.Icon = Picture.Load($PATHICONS & "dnfdrake.svg")
@@ -246,8 +247,10 @@ Public Sub Process_Read()
      BTNDNFDRAKE.SetFocus
     Endif
   Endif
+Endif  
 'VERIFICA AGGIORNAMENTI FLATDRAKE*******************************************
-  If InStr($sText, "Proceed") Or If InStr($sText, "install") > 0 Then 
+ If $READSWITCH = 2 Then
+  If InStr($sText, "Proceed") > 0 Or If InStr($sText, "install") > 0 Then 
     If InStr($sText, "[Y/n]") Then
        Print #$hProcess, "N" & gb.NewLine; 
     Endif
@@ -273,7 +276,8 @@ Public Sub Process_Read()
      BTNDNFDRAKE.SetFocus
     Endif
   Endif
- 
+ Endif
+
 End
 
 'GESTIONE PULSANTI MOUSE SULLA TRAY******************************************
@@ -466,6 +470,7 @@ End
 
 Public Sub TMRUPDATE_Timer() 
  BTNCHECK.Enabled = True
+ $READSWITCH = 0
  CHECKCONNECTION
  Wait 1
  If $CONNECTION = 1 Then
@@ -481,8 +486,10 @@ Public Sub TMRUPDATE_Timer()
           Endif
     Else If $TMRUPDATEVENT = 1 Then
        UPGRADESDNFDRAKE
+       $READSWITCH = 1
     Else If $TMRUPDATEVENT = 2 Then
        UPGRADESFLATDRAKE
+       $READSWITCH = 2
     Endif
  Else 
     TMRUPDATE.Delay = 180000

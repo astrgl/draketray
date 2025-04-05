@@ -2,7 +2,7 @@
 Title=DrakeTray
 Startup=FMain
 Icon=draketray.svg
-Version=3.8.95
+Version=3.8.96
 Component=gb.image
 Component=gb.qt6
 Component=gb.form
@@ -12,6 +12,6 @@ Description="DrakeTray is a tray updates notifier for DnfDrake and Flatdrake"
 Authors="Mauro Carbini (aka Astragalo) mauro.carbini@gmail.com"
 TabSize=2
 Language=en_US
-SourcePath=/home/mauro/src/rpm/SOURCES
+SourcePath=/home/mauro/Scrivania/tmp
 Vendor=Astragalo
 Packager=1
