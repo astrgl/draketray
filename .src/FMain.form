@@ -3,7 +3,7 @@
 { Form Form
   MoveScaled(178.5714,100,40,17)
   ToolTip = ("Click Tray for Hide")
-  Icon = Picture["draketray.svg"]
+  Icon = Picture["ICONS-EXTRA/draketray.png"]
   Resizable = False
   Border = False
   { LBLBACKGROUND Label

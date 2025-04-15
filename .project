@@ -1,8 +1,8 @@
 # Gambas Project File 3.0
 Title=DrakeTray
 Startup=FMain
-Icon=draketray.svg
-Version=3.9.0
+Icon=draketray.png
+Version=3.9.1
 Component=gb.image
 Component=gb.qt6
 Component=gb.form

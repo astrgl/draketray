@@ -2,7 +2,7 @@
 
 { Form Form
   MoveScaled(0,0,34,31)
-  Icon = Picture["draketray.svg"]
+  Icon = Picture["ICONS-EXTRA/draketray.png"]
   { BORDERCHKAUTOSTART Label
     MoveScaled(1,14,31.4286,4)
     Border = Border.Plain

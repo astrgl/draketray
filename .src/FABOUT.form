@@ -2,7 +2,7 @@
 
 { Form Form
   MoveScaled(0,0,64,77.1429)
-  Icon = Picture["draketray.svg"]
+  Icon = Picture["ICONS-EXTRA/draketray.png"]
   { LBLTITOLO Label
     MoveScaled(3,3,57.1429,6)
     Font = Font["DejaVu Sans,+8"]

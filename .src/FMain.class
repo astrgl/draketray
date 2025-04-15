@@ -192,10 +192,12 @@ Public Sub Form_Open()
     
 '*************************************************************************************
 'GESTIONE ERRORE PER ASSENZA ICONE A CAUSA DI SPEC ERRATO IN  OPENMANDRIVA ***********
-   Try TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.svg")
+   'Try TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.svg")
+    Try TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.png")
    If Error Then
      $PATHICONS = "/usr/share/draketray/"
-     TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.svg")
+'     TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.svg")
+     Try TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.png")
    Endif
 '**************************************************************************************
    TrayIcon1.Tooltip = "DrakeTray"
@@ -302,14 +304,16 @@ Private Sub DNFDRAKE()
   'Shell "pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY /usr/bin/dnfdrake.gambas"
   'Shell ("/usr/bin/dnfdrake.gambas")
   TXTMESSAGE.Text = "System Updated!"
-  TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.svg")
+  ' TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.svg")
+  TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.png")
   BTNCLOSE.Picture = Picture.Load($PATHICONS & "ricorda" & $THEMESSUFFIX)
   BTNDNFDRAKE.Enabled = False
 End
 Private Sub FLATDRAKE()
   Shell ("/usr/bin/flatdrake.gambas") 
   TXTMESSAGE.Text = "System Updated!"
-  TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.svg")
+'  TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.svg")
+  TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.png")
   BTNCLOSE.Picture = Picture.Load($PATHICONS & "ricorda" & $THEMESSUFFIX) 
   BTNFLATDRAKE.Enabled = False
 End
@@ -519,7 +523,8 @@ End
 Public Sub BTNCLOSE_Click()
   File.Save("/tmp/draketray/locktray", "0")
   TXTMESSAGE.Text = "System Updated!"
-  TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.svg")
+'  TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.svg")
+TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.png")
   TrayIcon1.Tooltip = "DrakeTray"
   BTNCLOSE.Picture = Picture.Load($PATHICONS & "ricorda" & $THEMESSUFFIX)
   BTNDNFDRAKE.Enabled = False
