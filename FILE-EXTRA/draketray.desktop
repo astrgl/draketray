@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=DrakeTray
 GenericName=Install & Remove Software
-Icon=draketray.svg
+Icon=draketray.png
 Exec=draketray.gambas
 Comment=DrakeTray is a tray updates notifier for DnfDrake and Flatdrake
 Terminal=false
