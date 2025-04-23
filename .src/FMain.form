@@ -20,7 +20,7 @@
     BorderRadius = 15
   }
   { TXTLANG Label
-    MoveScaled(23,2,4,4)
+    MoveScaled(32,4,4,4)
     Visible = False
     Alignment = Align.Center
     Border = Border.Plain
