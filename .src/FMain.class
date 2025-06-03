@@ -353,7 +353,7 @@ If $DNFDRAKECHECK = 1 And If $LOCKTRAY <> 2 Then
       ' Shell "dnf list available >" & User.Home &/ ".config/dnfdrake/noninstallati.txt" Wait
       ' Shell "dnf list upgrades >" & User.Home &/ ".config/dnfdrake/updates.txt" Wait
 'VERIFICA SE DISPONIBILI AGGIORNAMENTI 
-      Print #$hProcess, "dnf list --upgrades  --refresh" & gb.NewLine; 
+      Print #$hProcess, "dnf list --upgrades --refresh" & gb.NewLine; 
    Else 
    ' Message.info("salto giro  " & $LOCKVAL, "ok")  
   Endif    
