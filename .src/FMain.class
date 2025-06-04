@@ -348,7 +348,7 @@ If $DNFDRAKECHECK = 1 And If $LOCKTRAY <> 2 Then
       Shell "dnf clean all" Wait 
       Shell "dnf list --installed > /tmp/draketray/installati.txt" Wait
       Shell "dnf list --available > /tmp/draketray/noninstallati.txt" Wait
-      Shell "dnf list --upgrades > /tmp/draketray/updates.txt" Wait
+      Shell "dnf list --upgrades --refresh > /tmp/draketray/updates.txt" Wait
       ' Shell "dnf list installed >" & User.Home &/ ".config/dnfdrake/installati.txt" Wait
       ' Shell "dnf list available >" & User.Home &/ ".config/dnfdrake/noninstallati.txt" Wait
       ' Shell "dnf list upgrades >" & User.Home &/ ".config/dnfdrake/updates.txt" Wait
