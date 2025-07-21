@@ -2,7 +2,7 @@
 Title=DrakeTray
 Startup=FMain
 Icon=draketray.png
-Version=3.10.0
+Version=3.11.0
 Component=gb.image
 Component=gb.qt6
 Component=gb.form
