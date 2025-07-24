@@ -58,9 +58,9 @@ Public Sub Form_Open()
  $LANG = Left(System.Language, 5)
  
  'CARICAMENTO INGLESE SE LA LINGUA DI SISTEMA NON È SUPPORTATA*******************************
- If $LANG = "it_IT" Or $LANG = "fr_FR" Or $LANG = "en_US" Or $LANG = "pl_PL" Or $LANG = "en_GB" Or $LANG = "br_BR" Or $LANG = "es_ES" Or $LANG = "de_DE" Or $LANG = "ca_ES" Then 
+  If $LANG = "it_IT" Or $LANG = "fr_FR" Or $LANG = "en_US" Or $LANG = "pl_PL" Or $LANG = "en_GB" Or $LANG = "br_BR" Or $LANG = "es_ES" Or $LANG = "de_DE" Or $LANG = "ca_ES" Or $LANG = "ru_RU" Then 
 
- Else
+  Else
    txtlang.Text = "US" 
    $LANG = "en_US"
    Print #$hProcess, "LANG=en_US.UTF-8" & gb.NewLine;
@@ -254,7 +254,7 @@ Endif
  If $READSWITCH = 2 Then
   If InStr($sText, "Proceed") > 0 Or If InStr($sText, "install") > 0 Then 
     If InStr($sText, "[Y/n]") Then
-       Print #$hProcess, "N" & gb.NewLine; 
+        Print #$hProcess, "N" & gb.NewLine; 
     Endif
     File.Save("/tmp/draketray/locktray", "2")
     TrayIcon1.Icon = Picture.Load($PATHICONS & "flatdrake.svg")
@@ -344,21 +344,21 @@ If $DNFDRAKECHECK = 1 And If $LOCKTRAY <> 2 Then
    $LOCKVAL = CInteger(Val(Right(Left($LOCK))))
    If $LOCKVAL < 2 Then
 'PRECARICAMENTO LISTE PER DNFDRAKE
-   'Message.info("nuovo giro  " & $LOCKVAL, "ok")
+  ' Message.info("nuovo giro  " & $LOCKVAL, "ok")
       Shell "dnf clean all" Wait 
       Shell "dnf list --installed > /tmp/draketray/installati.txt" Wait
       Shell "dnf list --available > /tmp/draketray/noninstallati.txt" Wait
       Shell "dnf list --upgrades --refresh > /tmp/draketray/updates.txt" Wait
-      ' Shell "dnf list installed >" & User.Home &/ ".config/dnfdrake/installati.txt" Wait
-      ' Shell "dnf list available >" & User.Home &/ ".config/dnfdrake/noninstallati.txt" Wait
-      ' Shell "dnf list upgrades >" & User.Home &/ ".config/dnfdrake/updates.txt" Wait
+      Shell "dnf list --installed >" & User.Home &/ ".config/dnfdrake/installati.txt" Wait
+      Shell "dnf list --available >" & User.Home &/ ".config/dnfdrake/noninstallati.txt" Wait
+      Shell "dnf list --upgrades >" & User.Home &/ ".config/dnfdrake/updates.txt" Wait
 'VERIFICA SE DISPONIBILI AGGIORNAMENTI 
       Print #$hProcess, "dnf list --upgrades --refresh" & gb.NewLine; 
    Else 
    ' Message.info("salto giro  " & $LOCKVAL, "ok")  
   Endif    
     If $CONFIG = 2 Or If $CONFIG = 3 Then
-       TMRUPDATE.Delay = 10000
+       TMRUPDATE.Delay = 120000
     Else   
        TMRUPDATE.Delay = 7200000
        'TMRUPDATE.Delay = 5000
