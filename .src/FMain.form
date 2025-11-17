@@ -64,7 +64,7 @@
     MoveScaled(3,11,5,4)
     Visible = False
     Enabled = False
-    ToolTip = ("Launch DnfDrake")
+    ToolTip = ("Launch FlatDrake")
   }
   { BTNCONFIG Button
     MoveScaled(12,11,5,4)

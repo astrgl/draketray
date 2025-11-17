@@ -23,6 +23,30 @@ Public $SPEEDCHECH As Integer       'SERVE A FAR ESEGUIRE IL CECK UPDATE IMMEDIA
 Public $RISOLUZIONE As String
 Public $RISOLUZIONEX As Integer
 Public $RISOLUZIONEY As Integer
+'INSERITI PER LE NOTIFICHE TRAMITE DBUS******************************************
+Library "libnotify:4.0.0"
+Private Enum NOTIFY_URGENCY_LOW = 0, NOTIFY_URGENCY_NORMAL, NOTIFY_URGENCY_CRITICAL 'IMPOSATRE A 1 PER NOTIFICA PERMANENTE
+
+' gboolean notify_init (const char *app_name)
+' Initialized libnotify.
+Private Extern notify_init(app_name As String) As Boolean
+
+' NotifyNotification * notify_notification_new (const char *summary, const char *body, const char *icon)
+' Creates a new NotifyNotification.
+Private Extern notify_notification_new(summary As String, body As String, icon As String) As Pointer
+
+' void notify_notification_set_urgency (NotifyNotification *notification, NotifyUrgency urgency)
+' Sets the urgency level of this notification. 
+Private Extern notify_notification_set_urgency(notification As Pointer, urgency As Integer)
+
+' gboolean notify_notification_show (NotifyNotification *notification, GError **error)
+' Tells the notification server to display the notification on the screen.
+Private Extern notify_notification_show(notification As Pointer, gerror As Pointer)
+
+' void g_object_unref (gpointer object)
+' Decreases the reference count of object.
+Private Extern g_object_unref(gobject As Pointer)
+'********************************************************************************
 'APERTURA PROGRAMMA E COMANDI ESEGUITI*******************************************************
 
 Public Sub Form_Open()
@@ -202,7 +226,7 @@ Public Sub Form_Open()
 '**************************************************************************************
    TrayIcon1.Tooltip = "DrakeTray"
    TrayIcon1.Show
-   TrayIcon1_Click
+   MAGICVIEW
    $TMRUPDATEVENT = 0
    $SPEEDCHECH = 0
    TMRSTART.Enabled = True
@@ -234,7 +258,8 @@ Public Sub Process_Read()
     TrayIcon1.Tooltip = "DrakeTray"
     TrayIcon1.Show
     TXTMESSAGE.Text = "Updates Available!"
-    FMain.Show
+    DNFDRAKENOTIFICATION
+    'FMain.Show     DISATTIVATO PER TESTATRE LE NUOVE NOTIFICHE CON DBUS
     BTNFLATDRAKE.Visible = False
     bAperto = True
     TMRSTART.Delay = 5000
@@ -262,7 +287,8 @@ Endif
     TrayIcon1.Tooltip = "FlatDrakeTray"
     TrayIcon1.Show
     TXTMESSAGE.Text = "Updates Available!"
-    FMain.Show
+    FLATDRAKENOTIFICATION
+    'FMain.Show     DISATTIVATO PER TESTATRE LE NUOVE NOTIFICHE CON DBUS
     BTNFLATDRAKE.Visible = True
     bAperto = True
     TMRSTART.Delay = 5000
@@ -283,8 +309,8 @@ Endif
 End
 
 'GESTIONE PULSANTI MOUSE SULLA TRAY******************************************
-Public Sub TrayIcon1_Click()
-  
+Public Sub MAGICVIEW()
+
   If bAperto = True Then 
      Me.Hide
      bAperto = False
@@ -294,9 +320,28 @@ Public Sub TrayIcon1_Click()
    Endif
  
 End
+Public Sub TrayIcon1_Click()
+  Dim s As String
+  s = File.Load("/tmp/draketray/locktray")
+  If s = 0 Then
+    MAGICVIEW
+  Endif
+  If s = 1 Then
+     BTNDNFDRAKE_Click
+  Endif
+  If s = 2 Then
+    BTNFLATDRAKE_Click
+  Endif
+End
+
+
+Public Sub TrayIcon1_MiddleClick()
+   MAGICVIEW
+End
+
 
 Public Sub Form_LostFocus()
- TrayIcon1_Click
+ MAGICVIEW
 End 
 
 Private Sub DNFDRAKE()
@@ -439,6 +484,48 @@ Dim sOutput As String
     End If 
     
 End
+Private Sub DNFDRAKENOTIFICATION()
+ Dim nome As String
+ Dim notify As Pointer
+ 
+ nome = "DrakeTray"
+ 
+ notify_init(nome)
+   
+ notify = notify_notification_new(nome, "Updates Available!", Null)
+ If notify == 0 Then Error.Raise("Errore !")
+   
+' Imposta il livello di urgenza della notifica:
+ notify = notify_notification_new(nome, "Updates Available!", "/usr/share/icons/hicolor/scalable/apps/dnfdrake.svg")
+ notify_notification_set_urgency(notify, NOTIFY_URGENCY_NORMAL)
+ notify_notification_show(notify, 0)
+   
+ g_object_unref(notify)
+  
+  
+End
+
+Private Sub FLATDRAKENOTIFICATION()
+ Dim nome As String
+ Dim notify As Pointer
+ 
+ nome = "DrakeTray"
+ 
+ notify_init(nome)
+   
+ notify = notify_notification_new(nome, "Updates Available!", Null)
+ If notify == 0 Then Error.Raise("Errore !")
+   
+' Imposta il livello di urgenza della notifica:
+ notify = notify_notification_new(nome, "Updates Available!", "/usr/share/icons/hicolor/32x32/apps/flatdrake.svg")
+ notify_notification_set_urgency(notify, NOTIFY_URGENCY_NORMAL)
+ notify_notification_show(notify, 0)
+   
+ g_object_unref(notify)
+  
+  
+End
+
 
 
 Public Sub LOADICONS()
@@ -459,7 +546,7 @@ Public Sub TMRSTART_Timer()
      File.Save("/tmp/draketray/locktray", "0")
   Endif
   If bAperto = True Then
-  TrayIcon1_Click  
+  MAGICVIEW  
     If $STARTUP = 0 Then
       TrayIcon1.Hide
       $STARTUP = 1  
@@ -505,10 +592,10 @@ End
 'ALTRI COMANDI*******************************************
 
 Public Sub TXTMESSAGE_DblClick()
-  TrayIcon1_Click
+  MAGICVIEW
 End
 Public Sub TXTMESSAGE_Menu()
-  TrayIcon1_Click  
+  MAGICVIEW  
 End
 
 
@@ -530,7 +617,7 @@ TrayIcon1.Icon = Picture.Load($PATHICONS & "draketray.png")
   BTNDNFDRAKE.Enabled = False
   BTNFLATDRAKE.Enabled = False
   TrayIcon1.hide
-  TrayIcon1_Click
+  MAGICVIEW
   TMRUPDATE.Enabled = False
   If BTNFLATDRAKE.Visible = True Or If $FLATDRAKECHECK = 0 Then
      TMRUPDATE.Delay = 7200000
@@ -596,12 +683,12 @@ Public Sub BTNCHECK_Click()
   TMRUPDATE.Delay = 1
   TMRUPDATE.Enabled = True
   BTNCHECK.Enabled = False
-  TrayIcon1_Click  
+  MAGICVIEW  
 
 End
 Public Sub LBLBACKGROUND_DblClick()
-  TrayIcon1_Click
+  MAGICVIEW
 End
 Public Sub LBLBACKGROUND_Menu()
-  TrayIcon1_Click
+  MAGICVIEW
 End
