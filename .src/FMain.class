@@ -518,6 +518,7 @@ Private Sub FLATDRAKENOTIFICATION()
    
 ' Imposta il livello di urgenza della notifica:
  notify = notify_notification_new(nome, "Updates Available!", "/usr/share/icons/hicolor/scalable/apps/flatdrake.svg")
+ 
  notify_notification_set_urgency(notify, NOTIFY_URGENCY_NORMAL)
  notify_notification_show(notify, 0)
    
