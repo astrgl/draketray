@@ -46,6 +46,7 @@ Private Extern notify_notification_show(notification As Pointer, gerror As Point
 ' void g_object_unref (gpointer object)
 ' Decreases the reference count of object.
 Private Extern g_object_unref(gobject As Pointer)
+
 '********************************************************************************
 'APERTURA PROGRAMMA E COMANDI ESEGUITI*******************************************************
 
