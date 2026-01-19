@@ -391,6 +391,8 @@ If $DNFDRAKECHECK = 1 And If $LOCKTRAY <> 2 Then
    If $LOCKVAL < 2 Then
 'PRECARICAMENTO LISTE PER DNFDRAKE
   ' Message.info("nuovo giro  " & $LOCKVAL, "ok")
+      Shell "dnf repoquery --qf " & Chr$(34) & "%{group}" & Chr$(92) & "n" & Chr$(34) & " > /tmp/draketray/GRUPPI.txt " Wait 'GENERA L'ELENCO DEI GRUPPI"
+      Shell ("dnf repoquery  --qf '%{group}\t  %{name}\t %{summary}\t %{version}\t %{release}\t %{arch}\t %{installsize}\t  %{repoid}\t\n' > /tmp/draketray/tuttigruppi.txt") Wait 'CREA L'ELENCO DELLE INFO DEI GRUPPI
       Shell "dnf clean all" Wait 
       Shell "dnf list --installed > /tmp/draketray/installati.txt" Wait
       Shell "dnf list --available > /tmp/draketray/noninstallati.txt" Wait
